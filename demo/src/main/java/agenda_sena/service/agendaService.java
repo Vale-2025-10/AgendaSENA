@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class agendaService {
+public class AgendaService {
 
     private final AmbienteRepository ambienteRepository;
     private final ReservaRepository reservaRepository;
 
-    public agendaService(AmbienteRepository ambienteRepository, ReservaRepository reservaRepository) {
+    public AgendaService(AmbienteRepository ambienteRepository, ReservaRepository reservaRepository) {
         this.ambienteRepository = ambienteRepository;
         this.reservaRepository = reservaRepository;
     }
@@ -154,20 +154,21 @@ public class agendaService {
     }
 
     public List<ReporteOcupacionDTO> generarReporteOcupacion(LocalDate fecha) {
-        LocalDateTime inicioDia = fecha.atStartOfDay();
-        LocalDateTime finDia = inicioDia.plusDays(1);
-        List<Ambiente> ambientes = ambienteRepository.findAll();
-        List<ReporteOcupacionDTO> reporte = new ArrayList<>();
+    LocalDateTime inicioDia = fecha.atStartOfDay();
+    LocalDateTime finDia = inicioDia.plusDays(1);
+    List<Ambiente> ambientes = ambienteRepository.findAll();
+    List<ReporteOcupacionDTO> reporte = new ArrayList<>();
 
-        for (Ambiente a : ambientes) {
-            List<Reserva> activas = reservaRepository.findActivasPorAmbienteYDia(a.getId(), inicioDia, finDia);
-            double horasOcupadas = 0;
-            for (Reserva r : activas) {
-                horasOcupadas += ChronoUnit.HOURS.between(r.getFechaHoraInicio(), r.getFechaHoraFin());
-            }
-            double porcentaje = (horasOcupadas / 16.0) * 100.0; // 16 horas institucionales
-            reporte.add(new ReporteOcupacionDTO(a.getId(), a.getNombre(), horasOcupadas, porcentaje));
+    for (Ambiente a : ambientes) {
+        List<Reserva> activas = reservaRepository.findActivasPorAmbienteYDia(a.getId(), inicioDia, finDia);
+        double horasOcupadas = 0;
+        for (Reserva r : activas) {
+            horasOcupadas += java.time.temporal.ChronoUnit.HOURS.between(r.getFechaHoraInicio(), r.getFechaHoraFin());
         }
-        return reporte;
+        double porcentaje = (horasOcupadas / 16.0) * 100.0; // 16 horas institucionales
+        reporte.add(new ReporteOcupacionDTO(a.getId(), a.getNombre(), horasOcupadas, porcentaje));
     }
+    return reporte;
+
+}
 }
