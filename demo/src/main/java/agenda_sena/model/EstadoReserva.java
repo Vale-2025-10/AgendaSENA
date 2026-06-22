@@ -1,5 +1,8 @@
 package agenda_sena.model;
 
-public class EstadoReserva {
-    
+public enum EstadoReserva {
+
+    ACTIVA,
+    CANCELADA,
+    FINALIZADA
 }

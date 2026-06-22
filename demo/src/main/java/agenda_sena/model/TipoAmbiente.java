@@ -1,5 +1,8 @@
 package agenda_sena.model;
 
-public class TipoAmbiente {
-    
+public enum TipoAmbiente {
+
+    SALA,
+    LABORATORIO,
+    AUDITORIO
 }
